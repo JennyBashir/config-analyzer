@@ -1,0 +1,10 @@
+version: 0.1
+
+log:
+  level: debug
+
+database:
+  password: qwerty
+
+server:
+  host: 0.0.0.0

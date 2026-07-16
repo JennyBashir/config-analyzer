@@ -1,0 +1,20 @@
+# IDE
+.idea/
+
+# macOS
+.DS_Store
+
+# Binaries
+checker
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Coverage
+*.out
+coverage.out
+
+# Environment
+.env

@@ -3,7 +3,7 @@ package rules
 import (
 	"github.com/JennyBashir/config-analyzer/internal/config"
 	"github.com/JennyBashir/config-analyzer/internal/types"
-	"strconv"
+	"github.com/JennyBashir/config-analyzer/internal/walker"
 	"strings"
 )
 
@@ -14,7 +14,11 @@ var suspiciousWords = []string{
 	"token",
 	"apikey",
 	"api_key",
-	"private",
+	"password",
+	"passwd",
+	"access_token",
+	"auth_token",
+	"client_secret",
 }
 
 func isSuspiciousKey(key string) bool {
@@ -28,46 +32,29 @@ func isSuspiciousKey(key string) bool {
 	return false
 }
 
-func findPasswords(path string, value any) []types.Issue {
+func CheckPassword(cfg config.Config) []types.Issue {
 	var issues []types.Issue
 
-	switch v := value.(type) {
+	walker.Walk("", cfg, func(path string, value any) {
 
-	case map[string]any:
-		var nextPath string
+		parts := strings.Split(path, ".")
+		key := parts[len(parts)-1]
 
-		for key, child := range v {
-			if path == "" {
-				nextPath = key
-			} else {
-				nextPath = path + "." + key
-			}
-			if isSuspiciousKey(key) {
-				if _, ok := child.(string); ok {
-					issues = append(issues, types.Issue{
-						Severity:       "HIGH",
-						Message:        "пароль хранится в открытом виде: " + nextPath,
-						Recommendation: "используйте секрет-хранилище или переменные окружения",
-					})
-				}
-			}
-			issues = append(issues, findPasswords(nextPath, child)...)
+		str, ok := value.(string)
+		if !ok {
+			return
 		}
 
-	case []any:
-		var nextPath string
-		for ind, val := range v {
-			if path == "" {
-				nextPath = "[" + strconv.Itoa(ind) + "]"
-			} else {
-				nextPath = path + "[" + strconv.Itoa(ind) + "]"
+		if isSuspiciousKey(key) {
+			if strings.HasPrefix(str, "$") || strings.HasPrefix(str, "${") {
+				return
 			}
-			issues = append(issues, findPasswords(nextPath, val)...)
+			issues = append(issues, types.Issue{
+				Severity:       "HIGH",
+				Message:        "секрет хранится в открытом виде в: " + path,
+				Recommendation: "используйте секрет-хранилище или переменные окружения",
+			})
 		}
-	}
+	})
 	return issues
-}
-
-func CheckPassword(cfg config.Config) []types.Issue {
-	return findPasswords("", cfg)
 }

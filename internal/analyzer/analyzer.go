@@ -11,6 +11,7 @@ func Analyze(cfg config.Config) []types.Issue {
 	issues = append(issues, rules.CheckDebug(cfg)...)
 	issues = append(issues, rules.CheckPassword(cfg)...)
 	issues = append(issues, rules.CheckTLS(cfg)...)
+	issues = append(issues, rules.CheckOpenBind(cfg)...)
 	issues = append(issues, rules.CheckAlgorithm(cfg)...)
 	return issues
 }

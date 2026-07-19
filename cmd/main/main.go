@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/JennyBashir/config-analyzer/internal/analyzer"
 	"github.com/JennyBashir/config-analyzer/internal/config"
 	"log"
 	"os"
@@ -13,9 +15,23 @@ func main() {
 
 	path := os.Args[1]
 
-	conf, err := config.ParseConfig(path)
+	cfg, err := config.ParseConfig(path)
 	if err != nil {
-		log.Fatalf("err: %v", err)
+		log.Fatalf("failed to parse config: %v", err)
 	}
-	log.Print("success config loading ", conf)
+
+	issues := analyzer.Analyze(cfg)
+
+	for _, issue := range issues {
+		fmt.Printf(
+			"%s: %s\nRecommendation: %s\n\n",
+			issue.Severity,
+			issue.Message,
+			issue.Recommendation,
+		)
+	}
+
+	if len(issues) > 0 {
+		os.Exit(1)
+	}
 }

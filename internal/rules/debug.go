@@ -3,33 +3,27 @@ package rules
 import (
 	"github.com/JennyBashir/config-analyzer/internal/config"
 	"github.com/JennyBashir/config-analyzer/internal/types"
+	"github.com/JennyBashir/config-analyzer/internal/walker"
+	"strings"
 )
 
 func CheckDebug(cfg config.Config) []types.Issue {
-	logValue, ok := cfg["log"]
-	if !ok {
-		return nil
-	}
+	var issues []types.Issue
 
-	logMap, ok := logValue.(map[string]any)
-	if !ok {
-		return nil
-	}
+	walker.Walk("", cfg, func(path string, value any) {
+		level, ok := value.(string)
+		if !ok {
+			return
+		}
 
-	level, ok := logMap["level"].(string)
-	if !ok {
-		return nil
-	}
+		if path == "log.level" && strings.EqualFold(level, "debug") {
+			issues = append(issues, types.Issue{
+				Severity:       "LOW",
+				Message:        "включено логирование в debug-режиме: " + path,
+				Recommendation: "Используйте уровень логирования info или выше в production.",
+			})
+		}
+	})
 
-	if level == "debug" {
-		return nil
-	}
-
-	return []types.Issue{
-		{
-			Severity:       "LOW",
-			Message:        "",
-			Recommendation: "",
-		},
-	}
+	return issues
 }

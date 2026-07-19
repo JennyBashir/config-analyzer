@@ -21,17 +21,6 @@ var suspiciousWords = []string{
 	"client_secret",
 }
 
-func isSuspiciousKey(key string) bool {
-	key = strings.ToLower(key)
-
-	for _, word := range suspiciousWords {
-		if strings.Contains(key, word) {
-			return true
-		}
-	}
-	return false
-}
-
 func CheckPassword(cfg config.Config) []types.Issue {
 	var issues []types.Issue
 
@@ -45,7 +34,7 @@ func CheckPassword(cfg config.Config) []types.Issue {
 			return
 		}
 
-		if isSuspiciousKey(key) {
+		if containsKeyword(key, suspiciousWords) {
 			if strings.HasPrefix(str, "$") || strings.HasPrefix(str, "${") {
 				return
 			}

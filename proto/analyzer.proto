@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package analyzer;
+
+option go_package = "github.com/JennyBashir/config-analyzer/gen/analyzer;analyzer";
+
+service ConfigAnalyzer {
+  rpc Analyze (AnalyzeRequest) returns (AnalyzeResponse);
+}
+
+message AnalyzeRequest {
+  string config = 1;
+}
+
+message Issue {
+  string severity = 1;
+  string message = 2;
+  string recommendation = 3;
+}
+
+message AnalyzeResponse {
+  repeated Issue issues = 1;
+}

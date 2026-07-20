@@ -14,19 +14,26 @@ func LoadConfig(opts Options) (config.Config, error) {
 		if err != nil {
 			return nil, err
 		}
-		cfg, err = config.Parse(data, ".json")
-		if err != nil {
-			cfg, err = config.Parse(data, ".yaml")
-			if err != nil {
-				return nil, err
+
+		extSlice := []string{
+			".json",
+			".yaml",
+			".yml",
+		}
+
+		for _, ext := range extSlice {
+			cfg, err = config.Parse(data, ext)
+			if err == nil {
+				return cfg, nil
 			}
 		}
-	} else {
-		var err error
-		cfg, err = config.ReadConfig(opts.Path)
-		if err != nil {
-			return nil, err
-		}
+
+		return nil, err
+	}
+	var err error
+	cfg, err = config.ReadConfig(opts.Path)
+	if err != nil {
+		return nil, err
 	}
 	return cfg, nil
 }

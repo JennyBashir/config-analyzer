@@ -3,19 +3,18 @@ package main
 import (
 	"fmt"
 	"github.com/JennyBashir/config-analyzer/internal/analyzer"
-	"github.com/JennyBashir/config-analyzer/internal/config"
+	"github.com/JennyBashir/config-analyzer/internal/cli"
 	"log"
 	"os"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatal("usage: checker <config-file>")
+	opts, err := cli.ParseFlags()
+	if err != nil {
+		log.Fatalf("parse flags error: %v", err)
 	}
 
-	path := os.Args[1]
-
-	cfg, err := config.ParseConfig(path)
+	cfg, err := cli.LoadConfig(opts)
 	if err != nil {
 		log.Fatalf("failed to parse config: %v", err)
 	}
@@ -31,7 +30,7 @@ func main() {
 		)
 	}
 
-	if len(issues) > 0 {
+	if len(issues) > 0 && !opts.Silent {
 		os.Exit(1)
 	}
 }

@@ -11,9 +11,7 @@ import (
 
 type Config map[string]any
 
-func ParseConfig(path string) (Config, error) {
-	var cfg Config
-
+func ReadConfig(path string) (Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -21,16 +19,22 @@ func ParseConfig(path string) (Config, error) {
 
 	ext := strings.ToLower(filepath.Ext(path))
 
+	return Parse(data, ext)
+}
+
+func Parse(data []byte, ext string) (Config, error) {
+	var cfg Config
+
 	switch ext {
 	case ".json":
-		err = json.Unmarshal(data, &cfg)
+		err := json.Unmarshal(data, &cfg)
+		return cfg, err
+
 	case ".yaml", ".yml":
-		err = yaml.Unmarshal(data, &cfg)
+		err := yaml.Unmarshal(data, &cfg)
+		return cfg, err
+
 	default:
-		err = fmt.Errorf("unsupported file extension: %s", ext)
+		return nil, fmt.Errorf("")
 	}
-	if err != nil {
-		return nil, err
-	}
-	return cfg, err
 }

@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-type Config map[string]any
+type Config = map[string]any
 
 func ReadConfig(path string) (Config, error) {
 	data, err := os.ReadFile(path)

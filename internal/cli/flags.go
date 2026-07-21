@@ -12,9 +12,13 @@ type Options struct {
 }
 
 func ParseFlags() (Options, error) {
-	silent := flag.Bool("s", false, "не выходить с ошибкой")
+	var silent bool
+	var stdin bool
 
-	stdin := flag.Bool("stdin", false, "прочитать конфигурацию из стандартного потока ввода вместо файла")
+	flag.BoolVar(&silent, "s", false, "не выходить с ошибкой")
+	flag.BoolVar(&silent, "silent", false, "не выходить с ошибкой")
+
+	flag.BoolVar(&stdin, "stdin", false, "прочитать конфигурацию из стандартного потока ввода вместо файла")
 
 	flag.Parse()
 
@@ -22,7 +26,7 @@ func ParseFlags() (Options, error) {
 
 	var path string
 
-	if !*stdin {
+	if !stdin {
 		if len(args) == 0 {
 			return Options{}, fmt.Errorf("usage: checker <config-file>")
 		}
@@ -30,8 +34,8 @@ func ParseFlags() (Options, error) {
 	}
 
 	return Options{
-		Silent: *silent,
-		Stdin:  *stdin,
+		Silent: silent,
+		Stdin:  stdin,
 		Path:   path,
 	}, nil
 }

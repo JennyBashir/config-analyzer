@@ -1,10 +1,11 @@
-version: 0.1
-
 log:
   level: debug
 
 database:
-  password: qwerty
+  password: secret123
 
 server:
   host: 0.0.0.0
+
+security:
+  algorithm: md5

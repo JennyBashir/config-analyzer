@@ -7,9 +7,10 @@ import (
 	"os/signal"
 	"syscall"
 
+	"google.golang.org/grpc"
+
 	pb "github.com/JennyBashir/config-analyzer/gen"
 	grpcserver "github.com/JennyBashir/config-analyzer/internal/grpc"
-	"google.golang.org/grpc"
 )
 
 func main() {

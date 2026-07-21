@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"errors"
+
 	analyzer "github.com/JennyBashir/config-analyzer/gen"
 	issues "github.com/JennyBashir/config-analyzer/internal/analyzer"
 	"github.com/JennyBashir/config-analyzer/internal/config"

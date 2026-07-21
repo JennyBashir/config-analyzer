@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/JennyBashir/config-analyzer/internal/analyzer"
-	"github.com/JennyBashir/config-analyzer/internal/cli"
 	"log"
 	"os"
+
+	"github.com/JennyBashir/config-analyzer/internal/analyzer"
+	"github.com/JennyBashir/config-analyzer/internal/cli"
 )
 
 func main() {

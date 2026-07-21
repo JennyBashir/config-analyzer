@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
-	pb "github.com/JennyBashir/config-analyzer/gen"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"time"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
+	pb "github.com/JennyBashir/config-analyzer/gen"
 )
 
 func main() {

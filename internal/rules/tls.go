@@ -1,10 +1,11 @@
 package rules
 
 import (
+	"strings"
+
 	"github.com/JennyBashir/config-analyzer/internal/config"
 	"github.com/JennyBashir/config-analyzer/internal/types"
 	"github.com/JennyBashir/config-analyzer/internal/walker"
-	"strings"
 )
 
 func CheckTLS(cfg config.Config) []types.Issue {

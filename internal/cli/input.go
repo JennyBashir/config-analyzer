@@ -1,9 +1,10 @@
 package cli
 
 import (
-	"github.com/JennyBashir/config-analyzer/internal/config"
 	"io"
 	"os"
+
+	"github.com/JennyBashir/config-analyzer/internal/config"
 )
 
 func LoadConfig(opts Options) (config.Config, error) {

@@ -20,13 +20,18 @@ func CheckTLS(cfg config.Config) []types.Issue {
 		var message string
 		var recommendation string
 
-		if strings.HasSuffix(path, ".tls.enabled") && !val {
+		if (path == "tls.enabled" ||
+			strings.HasSuffix(path, ".tls.enabled")) && !val {
+
 			message = "TLS отключен: " + path
 			recommendation = "Включите TLS."
 			bad = true
 		}
-		if (strings.HasSuffix(path, ".insecure_skip_verify") ||
+		if (path == "insecure_skip_verify" ||
+			strings.HasSuffix(path, ".insecure_skip_verify") ||
+			path == "skip_tls_verify" ||
 			strings.HasSuffix(path, ".skip_tls_verify")) && val {
+
 			message = "Отключена проверка TLS-сертификата: " + path
 			recommendation = "Включите проверку TLS-сертификата."
 			bad = true
